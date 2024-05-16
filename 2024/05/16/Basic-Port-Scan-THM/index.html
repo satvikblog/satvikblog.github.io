@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Basic Port Scan - THM - Hexo</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Satvik&#039;s Blog"><meta name="msapplication-TileImage" content="/img/profile.jpg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Satvik&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="Nmap Basic Port ScansINTRODUCTIONThe next step would be checking which ports are open and listening and which ports are closed. Therefore, in this room and the next one, we focus on port scanning and"><meta property="og:type" content="blog"><meta property="og:title" content="Basic Port Scan - THM"><meta property="og:url" content="http://example.com/2024/05/16/Basic-Port-Scan-THM/"><meta property="og:site_name" content="Hexo"><meta property="og:description" content="Nmap Basic Port ScansINTRODUCTIONThe next step would be checking which ports are open and listening and which ports are closed. Therefore, in this room and the next one, we focus on port scanning and"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://example.com/img/og_image.png"><meta property="article:published_time" content="2024-05-16T10:05:28.000Z"><meta property="article:modified_time" content="2024-05-16T10:08:16.044Z"><meta property="article:author" content="John Doe"><meta property="article:tag" content="tryhackme"><meta property="article:tag" content="nmap"><meta property="article:tag" content="information-gathering"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="http://example.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/05/16/Basic-Port-Scan-THM/"},"headline":"Basic Port Scan - THM","image":["http://example.com/img/og_image.png"],"datePublished":"2024-05-16T10:05:28.000Z","dateModified":"2024-05-16T10:08:16.044Z","author":{"@type":"Person","name":"John Doe"},"publisher":{"@type":"Organization","name":"Hexo","logo":{"@type":"ImageObject","url":"http://example.com/img/profile.jpg"}},"description":"Nmap Basic Port ScansINTRODUCTIONThe next step would be checking which ports are open and listening and which ports are closed. Therefore, in this room and the next one, we focus on port scanning and"}</script><link rel="canonical" href="http://example.com/2024/05/16/Basic-Port-Scan-THM/"><link rel="icon" href="/img/profile.jpg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600&amp;family=Roboto+Mono"><link data-pjax rel="stylesheet" href="/css/cyberpunk.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/profile.jpg" alt="Hexo" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2024-05-16T10:05:28.000Z" title="16/5/2024, 3:35:28 pm">2024-05-16</time></span><span class="level-item">Updated&nbsp;<time dateTime="2024-05-16T10:08:16.044Z" title="16/5/2024, 3:38:16 pm">2024-05-16</time></span><span class="level-item">10 minutes read (About 1493 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">Basic Port Scan - THM</h1><div class="content"><h1 id="Nmap-Basic-Port-Scans"><a href="#Nmap-Basic-Port-Scans" class="headerlink" title="Nmap Basic Port Scans"></a>Nmap Basic Port Scans</h1><h2 id="INTRODUCTION"><a href="#INTRODUCTION" class="headerlink" title="INTRODUCTION"></a>INTRODUCTION</h2><p>The next step would be checking which ports are open and listening and which ports are closed. Therefore, in this room and the next one, we focus on port scanning and the different types of port scans used by nmap. This room explains:</p>
+<ul>
+<li>TCP connect port scan</li>
+<li>TCP SYN port scan</li>
+<li>UDP port scan</li>
+</ul>
+<p>Moreover, we discuss the different options to specify the ports, the scan rate, and the number of parallel probes.</p>
+<h2 id="TASK-2-TCP-and-UDP-PORTS"><a href="#TASK-2-TCP-and-UDP-PORTS" class="headerlink" title="TASK - 2 TCP and UDP PORTS"></a>TASK - 2 TCP and UDP PORTS</h2><p>In the same sense that an IP address specifies a host on a network among many others, a TCP port or UDP port is used to identify a network service running on that host. A server provides the network service, and it adheres to a specific network protocol. Examples include providing time, responding to DNS queries, and serving web pages. A port is usually linked to a service using that specific port number. For instance, an HTTP server would bind to TCP port 80 by default; moreover, if the HTTP server supports SSL&#x2F;TLS, it would listen on TCP port 443. (TCP ports 80 and 443 are the default ports for HTTP and HTTPS; however, the webserver administrator might choose other port numbers if necessary.) Furthermore, no more than one service can listen on any TCP or UDP port (on the same IP address).</p>
+<p>At the risk of oversimplification, we can classify ports in two states:</p>
+<ul>
+<li>Open port indicates that there is some service listening on that port.</li>
+<li>Closed port indicates that there is no service listening on that port.</li>
+</ul>
+<p>However, in practical situations, we need to consider the impact of firewalls. For instance, a port might be open, but a firewall might be blocking the packets. Therefore, Nmap considers the following six states:</p>
+<ul>
+<li>Open: indicates that a service is listening on the specified port.</li>
+<li>Closed: indicates that no service is listening on the specified port, although the port is accessible. By accessible, we mean that it is reachable and is not blocked by a firewall or other security appliances&#x2F;programs.</li>
+<li>Filtered: means that Nmap cannot determine if the port is open or closed because the port is not accessible. This state is usually due to a firewall preventing Nmap from reaching that port. Nmap’s packets may be blocked from reaching the port; alternatively, the responses are blocked from reaching Nmap’s host.</li>
+<li>Unfiltered: means that Nmap cannot determine if the port is open or closed, although the port is accessible. This state is encountered when using an ACK scan -sA.</li>
+<li>Open|Filtered: This means that Nmap cannot determine whether the port is open or filtered.</li>
+<li>Closed|Filtered: This means that Nmap cannot decide whether a port is closed or filtered.</li>
+</ul>
+<h3 id="ANSWERS"><a href="#ANSWERS" class="headerlink" title="ANSWERS"></a>ANSWERS</h3><ol>
+<li><p>Which service uses UDP port 53 by default?</p>
+<ul>
+<li>Correct Answer: DNS</li>
+</ul>
+</li>
+<li><p>Which service uses TCP port 22 by default?</p>
+<ul>
+<li>Correct Answer: SSH</li>
+</ul>
+</li>
+<li><p>How many port states does Nmap consider?</p>
+<ul>
+<li>Correct Answer: 6</li>
+</ul>
+</li>
+<li><p>Which port state is the most interesting to discover as a pentester?</p>
+<ul>
+<li>Correct Answer: Open</li>
+</ul>
+</li>
+</ol>
+<h2 id="TASK-3-TCP-FLAGS"><a href="#TASK-3-TCP-FLAGS" class="headerlink" title="TASK 3 - TCP FLAGS"></a>TASK 3 - TCP FLAGS</h2><p>Nmap supports different types of TCP port scans. To understand the difference between these port scans, we need to review the TCP header. The TCP header is the first 24 bytes of a TCP segment. The following figure shows the TCP header as defined in RFC 793. This figure looks sophisticated at first; however, it is pretty simple to understand. In the first row, we have the source TCP port number and the destination port number. We can see that the port number is allocated 16 bits (2 bytes). In the second and third rows, we have the sequence number and the acknowledgment number. Each row has 32 bits (4 bytes) allocated, with six rows total, making up 24 bytes.</p>
+<p>In particular, we need to focus on the flags that Nmap can set or unset. We have highlighted the TCP flags in red. Setting a flag bit means setting its value to 1. From left to right, the TCP header flags are:</p>
+<ul>
+<li>URG: Urgent flag indicates that the urgent pointer filed is significant. The urgent pointer indicates that the incoming data is urgent, and that a TCP segment with the URG flag set is processed immediately without consideration of having to wait on previously sent TCP segments.</li>
+<li>ACK: Acknowledgment flag indicates that the acknowledgment number is significant. It is used to acknowledge the receipt of a TCP segment.</li>
+<li>PSH: Push flag asking TCP to pass the data to the application promptly.</li>
+<li>RST: Reset flag is used to reset the connection. Another device, such as a firewall, might send it to tear a TCP connection. This flag is also used when data is sent to a host and there is no service on the receiving end to answer.</li>
+<li>SYN: Synchronize flag is used to initiate a TCP 3-way handshake and synchronize sequence numbers with the other host. The sequence number should be set randomly during TCP connection establishment.</li>
+<li>FIN: The sender has no more data to send.</li>
+</ul>
+<h3 id="ANSWERS-1"><a href="#ANSWERS-1" class="headerlink" title="ANSWERS"></a>ANSWERS</h3><ol>
+<li><p>What 3 letters represent the Reset flag?</p>
+<ul>
+<li>Correct Answer: RST</li>
+</ul>
+</li>
+<li><p>Which flag needs to be set when you initiate a TCP connection (first packet of TCP 3-way handshake)?</p>
+<ul>
+<li>Correct Answer: SYN</li>
+</ul>
+</li>
+</ol>
+<h2 id="TASK-4-TCP-CONNECT-SCAN"><a href="#TASK-4-TCP-CONNECT-SCAN" class="headerlink" title="TASK 4 - TCP CONNECT SCAN"></a>TASK 4 - TCP CONNECT SCAN</h2><p>TCP connect scan works by completing the TCP 3-way handshake. In standard TCP connection establishment, the client sends a TCP packet with SYN flag set, and the server responds with SYN&#x2F;ACK if the port is open; finally, the client completes the 3-way handshake by sending an ACK.</p>
+<p>We are interested in learning whether the TCP port is open, not establishing a TCP connection. Hence the connection is torn as soon as its state is confirmed by sending a RST&#x2F;ACK. You can choose to run TCP connect scan using -sT.</p>
+<p>It is important to note that if you are not a privileged user (root or sudoer), a TCP connect scan is the only possible option to discover open TCP ports.</p>
+<h3 id="Question"><a href="#Question" class="headerlink" title="Question:"></a>Question:</h3><ol>
+<li><p>Launch the VM. Open the AttackBox and execute nmap -sT 10.10.23.101 via the terminal. A new service has been installed on this VM since our last scan. Which port number was closed in the scan above but is now open on this target VM? </p>
+<ul>
+<li>Answer: 110</li>
+</ul>
+<p>Command: <code>nmap -sT 10.10.23.101</code></p>
+<p>New service: POP3</p>
+</li>
+</ol>
+<h2 id="TASK-5-TCP-SYN-SCAN"><a href="#TASK-5-TCP-SYN-SCAN" class="headerlink" title="TASK 5 - TCP SYN SCAN"></a>TASK 5 - TCP SYN SCAN</h2><p>Unprivileged users are limited to connect scan. However, the default scan mode is SYN scan, and it requires a privileged (root or sudoer) user to run it. SYN scan does not need to complete the TCP 3-way handshake; instead, it tears down the connection once it receives a response from the server. Because we didn’t establish a TCP connection, this decreases the chances of the scan being logged. We can select this scan type by using the -sS option.</p>
+<h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions:"></a>Questions:</h3><ol>
+<li><p>What is the new open port?</p>
+<ul>
+<li>Correct Answer: 6667</li>
+</ul>
+</li>
+<li><p>What is Nmap’s guess of the service name?</p>
+<ul>
+<li>Correct Answer: irc</li>
+</ul>
+</li>
+</ol>
+<h2 id="Task-7-Fine-Tuning-Scope-and-Performance"><a href="#Task-7-Fine-Tuning-Scope-and-Performance" class="headerlink" title="Task 7: Fine-Tuning Scope and Performance"></a>Task 7: Fine-Tuning Scope and Performance</h2><p>You can specify the ports you want to scan instead of the default 1000 ports. Specifying the ports is intuitive by now. Let’s see some examples:</p>
+<ul>
+<li>Port list: <code>-p22,80,443</code> will scan ports 22, 80, and 443.</li>
+<li>Port range: <code>-p1-1023</code> will scan all ports between 1 and 1023 inclusive, while <code>-p20-25</code> will scan ports between 20 and 25 inclusive.</li>
+<li>You can request the scan of all ports by using <code>-p-</code>, which will scan all 65535 ports. If you want to scan the most common 100 ports, add <code>-F</code>. Using <code>--top-ports 10</code> will check the ten most common ports.</li>
+</ul>
+<p>You can control the scan timing using <code>-T&lt;0-5&gt;</code>. <code>-T0</code> is the slowest (paranoid), while <code>-T5</code> is the fastest. According to the Nmap manual page, there are six templates:</p>
+<ul>
+<li>Paranoid (0)</li>
+<li>Sneaky (1)</li>
+<li>Polite (2)</li>
+<li>Normal (3)</li>
+<li>Aggressive (4)</li>
+<li>Insane (5)</li>
+</ul>
+<p>To avoid IDS alerts, you might consider <code>-T0</code> or <code>-T1</code>. For instance, <code>-T0</code> scans one port at a time and waits 5 minutes between sending each probe. If you don’t specify any timing, Nmap uses normal <code>-T3</code>. Note that <code>-T5</code> is the most aggressive in terms of speed; however, this can affect the accuracy of the scan results due to the increased likelihood of packet loss. Note that <code>-T4</code> is often used during CTFs and when learning to scan on practice targets, whereas <code>-T1</code> is often used during real engagements where stealth is more important.</p>
+<p>Alternatively, you can choose to control the packet rate using <code>--min-rate &lt;number&gt;</code> and <code>--max-rate &lt;number&gt;</code>. For example, <code>--max-rate 10</code> or <code>--max-rate=10</code> ensures that your scanner is not sending more than ten packets per second.</p>
+<p>Moreover, you can control probing parallelization using <code>--min-parallelism &lt;numprobes&gt;</code> and <code>--max-parallelism &lt;numprobes&gt;</code>. Nmap probes the targets to discover which hosts are live and which ports are open; probing parallelization specifies the number of such probes that can be run in parallel. For instance, <code>--min-parallelism=512</code> pushes Nmap to maintain at least 512 probes in parallel; these 512 probes are related to host discovery and open ports.</p>
+<h2 id="TASK-8-SUMMARY"><a href="#TASK-8-SUMMARY" class="headerlink" title="TASK 8 - SUMMARY"></a>TASK 8 - SUMMARY</h2><p>This room covered three types of scans:</p>
+<ul>
+<li>TCP Connect</li>
+<li>TCP SYN</li>
+<li>UDP</li>
+</ul>
+<p>These scan types should get you started discovering running TCP and UDP services on a target host.</p>
+<p>DONE</p>
+<p>THANK YOU,<br>Satvik Shetty</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Basic Port Scan - THM</p><p><a href="http://example.com/2024/05/16/Basic-Port-Scan-THM/">http://example.com/2024/05/16/Basic-Port-Scan-THM/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>John Doe</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2024-05-16</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2024-05-16</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/tryhackme/">tryhackme</a><a class="link-muted mr-2" rel="tag" href="/tags/nmap/">nmap</a><a class="link-muted mr-2" rel="tag" href="/tags/information-gathering/">information-gathering</a></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2024/05/16/hello-world/"><span class="level-item">Hello World</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/profile.jpg" alt="Satvik"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Satvik</p><p class="is-size-6 is-block">Satvik</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Hyderabad</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">2</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">3</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/satvik-vs" target="_blank" rel="me noopener">Follow</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Github" href="https://github.com/satvik-vs"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Facebook" href="https://instagram.com/satvikshetty.v"><i class="fab fa-instagram"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Twitter" href="https://twitter.com/SatvikVemulap2"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">Links</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://satvik.live" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Porfolio Site</span></span><span class="level-right"><span class="level-item tag">satvik.live</span></span></a></li><li><a class="level is-mobile" href="https://blog.satvik.live" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Blog</span></span><span class="level-right"><span class="level-item tag">blog.satvik.live</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-05-16T10:05:28.000Z">2024-05-16</time></p><p class="title"><a href="/2024/05/16/Basic-Port-Scan-THM/">Basic Port Scan - THM</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-05-16T09:28:57.406Z">2024-05-16</time></p><p class="title"><a href="/2024/05/16/hello-world/">Hello World</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">Archives</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2024/05/"><span class="level-start"><span class="level-item">May 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/information-gathering/"><span class="tag">information-gathering</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/nmap/"><span class="tag">nmap</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/tryhackme/"><span class="tag">tryhackme</span><span class="tag">1</span></a></div></div></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">Subscribe for updates</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="Subscribe"></div></div></form></div></div></div><div class="card widget"><div class="card-content"><div class="notification is-danger">You need to set <code>client_id</code> and <code>slot_id</code> to show this AD unit. Please set it in <code>_config.yml</code>.</div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">follow.it</h3><form action="" method="post" target="_blank"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="Subscribe"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/profile.jpg" alt="Hexo" height="28"></a><p class="is-size-7"><span>&copy; 2024 John Doe</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">© 2019</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script src="/js/pjax.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
